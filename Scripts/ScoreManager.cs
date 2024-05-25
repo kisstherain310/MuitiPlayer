@@ -46,16 +46,8 @@ public class ScoreManager : NetworkBehaviour
     [SerializeField] private TextMeshProUGUI scoreText;
     private NetworkVariable<int> score = new NetworkVariable<int>(0);
 
-    void Start()
-    {
-        // Chờ cho đến khi đối tượng mạng được khởi tạo trước khi thực hiện các thay đổi
-        if (IsServer)
-        {
-            score.Value = 0;
-        }
-        score.OnValueChanged += OnScoreChanged;
-        UpdateScoreText();
-    }
+    public GameObject direct;
+
     public void IncreaseScore()
     {
         if (IsClient)
@@ -64,7 +56,7 @@ public class ScoreManager : NetworkBehaviour
         }
         else
         {
-            score.Value++;
+            UpdateDirectStateClientRpc(true);
         }
     }
 
@@ -76,7 +68,7 @@ public class ScoreManager : NetworkBehaviour
         }
         else
         {
-            score.Value--;
+            UpdateDirectStateClientRpc(false);
         }
     }
 
@@ -84,24 +76,20 @@ public class ScoreManager : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void SubmitIncreaseScoreServerRpc()
     {
-        score.Value++;
+        UpdateDirectStateClientRpc(true);
     }
 
     // RPC gửi yêu cầu giảm điểm từ Client lên Server
     [ServerRpc(RequireOwnership = false)]
     private void SubmitDecreaseScoreServerRpc()
     {
-        score.Value--;
+        UpdateDirectStateClientRpc(false);
     }
 
-    private void OnScoreChanged(int oldValue, int newValue)
+    [ClientRpc]
+    private void UpdateDirectStateClientRpc(bool isActive)
     {
-        UpdateScoreText();
-    }
-
-    private void UpdateScoreText()
-    {
-        scoreText.text = "Score: " + score.Value.ToString();
+        direct.SetActive(isActive);
     }
 }
 
