@@ -43,13 +43,11 @@ using TMPro;
 
 public class ScoreManager : NetworkBehaviour
 {
-    [SerializeField] private TextMeshProUGUI scoreText;
-    private NetworkVariable<int> score = new NetworkVariable<int>(0);
-
     public GameObject direct;
 
     public void IncreaseScore()
     {
+        Debug.Log("bat");
         if (IsClient)
         {
             SubmitIncreaseScoreServerRpc();
@@ -62,6 +60,7 @@ public class ScoreManager : NetworkBehaviour
 
     public void DecreaseScore()
     {
+        Debug.Log("tat");
         if (IsClient)
         {
             SubmitDecreaseScoreServerRpc();

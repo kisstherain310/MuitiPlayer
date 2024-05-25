@@ -13,35 +13,20 @@ public class Network : MonoBehaviour
         {
             StartButtons();
         }
-        else
-        {
-            StatusLabels();
-        }
 
         GUILayout.EndArea();
     }
     static void StartButtons()
     {
-        if (GUILayout.Button("Host"))
+        if (GUILayout.Button("Tạo phòng"))
         {
             NetworkManager.Singleton.StartHost();
         }
 
-        if (GUILayout.Button("Client"))
+        if (GUILayout.Button("Vào phòng"))
         {
             NetworkManager.Singleton.StartClient();
         }
 
-        if (GUILayout.Button("Server"))
-        {
-            NetworkManager.Singleton.StartServer();
-        }
-    }
-    static void StatusLabels()
-    {
-        var nodeType = NetworkManager.Singleton.IsHost ? "Host" : NetworkManager.Singleton.IsServer ? "Server" : "Client";
-
-        GUILayout.Label("Transport: " + NetworkManager.Singleton.NetworkConfig.NetworkTransport.GetType().Name);
-        GUILayout.Label("Role: " + nodeType);
     }
 }
